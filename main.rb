@@ -1,14 +1,14 @@
 require './multidispatch'
-require './helloer'
-require './byer'
+require './morning'
+require './night'
 
-hello, bye = Helloer.new, Byer.new
+morning, night = Morning.new, Night.new
 
-hello.say
-bye.say 
+morning.say
+night.say
 
-hello.say("Foo")
-bye.say("Foo")
+morning.say("Foo")
+night.say("Foo")
 
-hello.say("Foo", 5)
-bye.say("Foo", 5)
+morning.say("Foo", 5)
+night.say("Foo", 5)

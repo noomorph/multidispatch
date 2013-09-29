@@ -1,21 +1,27 @@
 module Multidispatch
   def self.included(base)
+    base.instance_variable_set :@_def_lock, nil
+    base.instance_variable_set :@_def_dispatch, {}
     base.extend(ClassMethods)
   end
 
   module ClassMethods
-    def define(name, &block)
-      unless self.instance_variable_defined?(:@multi)
-        self.instance_variable_set(:@multi, {})
-        define_method(name) do |*args|
-          multi = self.class.instance_variable_get(:@multi)
-          multi[name][args.count].call(*args)
-        end
-      end
+    def method_added(name)
+      return if @_def_lock # prevent recursion
 
-      multi = self.instance_variable_get(:@multi)
-      multi[name] ||= {}
-      multi[name][block.arity] = block;
+      method = instance_method(name)
+
+      dispatch = @_def_dispatch
+      dispatch[name] ||= {}
+      dispatch[name][method.arity] = method;
+
+      @_def_lock = true
+      define_method(name) do |*args|
+        dispatch = self.class.instance_variable_get(:@_def_dispatch)
+        method = dispatch[name][args.count]
+        method.bind(self).call(*args)
+      end
+      @_def_lock = nil
     end
   end
 end
