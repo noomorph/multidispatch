@@ -47,7 +47,6 @@ module Multidispatch
   end
 
   module ClassMethods
-    puts "ClassMethods: #{self}"
     @@store = Store.new
 
     def method_added(name)
