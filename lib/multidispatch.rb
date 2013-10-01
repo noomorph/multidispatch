@@ -1,4 +1,4 @@
-require "version"
+require "multidispatch/version"
 
 module Multidispatch
 
