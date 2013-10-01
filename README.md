@@ -1,8 +1,9 @@
-ruby-multidispatch
+multidispatch
 ==================
 
-Very basic multidispatch in Ruby using natural syntax.
-It solves only one problem: converts
+Very basic multidispatch in **Ruby** using natural syntax.
+Currently supports overloads by count of mandatory parameters.
+So, it solves only one problem. Converts the following code:
 
 ```ruby
 class BoilerplateClass
@@ -23,7 +24,7 @@ class BoilerplateClass
 end
 ```
 
-to 
+to this nice one:
 
 ```ruby
 class MultidispatchClass
@@ -50,7 +51,7 @@ end
 
 Add this line to your application's Gemfile:
 
-    gem 'ruby-multidispatch'
+    gem 'multidispatch'
 
 And then execute:
 
@@ -58,17 +59,15 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install ruby-multidispatch
+    $ gem install multidispatch
 
 ## Usage
 
-See samples:
+See **sample/** folder:
 
-* multidispatch.rb - the module itself
-* morning.rb, night.rb - sample classes using multidispatch module
-* main.rb - quick CLI test for **Morning** and **Night**
-
-Currently supports overloads by count of mandatory parameters.
+* morning.rb - sample class using **multidispatch** module
+* main.rb - quick CLI test for **Morning**
+* Gemfile - sample gemfile
 
 ## Contributing
 
@@ -78,4 +77,5 @@ Currently supports overloads by count of mandatory parameters.
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
+... do not forget tests
 ... and Happy Hacking!
