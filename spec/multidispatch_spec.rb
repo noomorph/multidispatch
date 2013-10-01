@@ -1,23 +1,33 @@
 require "spec_helper"
 
 describe Multidispatch do
-
+  it "should have self.included method" do
+    subject.method(:included).should_not be_nil
+  end
 end
 
 describe Multidispatch::Store do
-  context "when not locked" do
+
+  context "when released" do
     it "can be locked" do
       expect { subject.lock! }.to change { subject.locked? }.from(nil).to(true)
     end
 
-    it "should return method on adding" do
-      subject.set(Hash, :inspect).should be_instance_of(UnboundMethod)
+    it "has no effect to release" do
+      expect { subject.release! }.not_to change { subject.locked? }
+    end
+
+    context "when method added" do
+      before { @the_method = subject.set(Hash, :inspect) }
+
+      it { @the_method.should be_instance_of(UnboundMethod) }
+      its(:store) { should == {"Hash" => {inspect: {0 => @the_method}}} }
+
+      it "get() returns it" do
+        subject.get(Hash, :inspect, 0).should == @the_method
+      end
     end
     
-    it "should return method on getting after adding" do
-      subject.set(Hash, :inspect)
-      subject.get(Hash, :inspect, 0).should be_instance_of(UnboundMethod)
-    end
   end
 
   context "when locked" do
@@ -27,13 +37,11 @@ describe Multidispatch::Store do
       expect { subject.release! }.to change { subject.locked? }.from(true).to(nil)
     end
     
-    it "should return nil after adding method" do
-      subject.set(Object, :some_method).should be_nil
-    end
+    context "when try to add method" do
+      before { @the_method = subject.set(Object, :some_method) }
 
-    it "should stay empty after adding method" do
-      subject.set(Object, :some_method)
-      subject.to_s().should == {}.to_s
+      it { @the_method.should be_nil }
+      its(:store) { should == {} }
     end
   end
 

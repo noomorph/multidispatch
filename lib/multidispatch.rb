@@ -3,6 +3,8 @@ require "version"
 module Multidispatch
 
   class Store
+    attr_reader :store
+
     def initialize
       @store = {}
       @locked = nil
@@ -38,32 +40,26 @@ module Multidispatch
       @locked = nil
       self
     end
-
-    def to_s
-      @store.to_s
-    end
   end
 
-  @store = Store.new
-
   def self.included(base)
-    base.instance_variable_set :@_def_lock, nil
-    base.instance_variable_set :@_def_dispatch, {}
     base.extend(ClassMethods)
   end
 
   module ClassMethods
+    puts "ClassMethods: #{self}"
+    @@store = Store.new
+
     def method_added(name)
-      return if @store.locked? # prevent recursion
+      return if @@store.locked? # prevent recursion
+      @@store.set(self, name)
 
-      @store.set(self, method_name)
-
-      @store.lock!
+      @@store.lock!
       define_method(name) do |*args|
         method = @@store.get(self.class, name, args.count)
         method.bind(self).call(*args)
       end
-      @store.release!
+      @@store.release!
     end
   end
 end
