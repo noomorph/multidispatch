@@ -22,18 +22,39 @@ describe "integration test" do
     end
   end
 
-  class Bar
-    include Multidispatch
+  context "when yet another class uses Multidispatch" do
+    class Bar
+      include Multidispatch
 
-    def foo() "foo"; end
-    def foo(a) "foo #{a}"; end
-    def foo(n, a) "#{n} foo #{a}"; end
+      def foo() "foo"; end
+      def foo(a) "foo #{a}"; end
+      def foo(n, a) "#{n} foo #{a}"; end
+    end
+
+    describe Bar do
+      it { subject.foo.should == "foo" }
+      it { subject.foo(5).should == "foo 5" }
+      it { subject.foo(0,1).should == "0 foo 1" }
+    end
   end
 
-  describe Bar do
-    it { subject.foo.should == "foo" }
-    it { subject.foo(5).should == "foo 5" }
-    it { subject.foo(0,1).should == "0 foo 1" }
+  context "when class including Multidispatch has def with optional args" do
+    class OptionalArgs
+      include Multidispatch
+
+      def foo() "foo"; end
+      def foo(n=1) "foo#{n}"; end
+      def foo(a,b) "foo#{a+b}"; end
+    end
+
+    describe OptionalArgs do
+      it "should not overwrite def with 0 args" do
+        subject.foo.should == "foo"
+      end
+      it "should not overwrite def with 2 args" do
+        subject.foo(2,5).should == "foo7"
+      end
+    end
   end
 
 end
