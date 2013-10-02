@@ -1,6 +1,8 @@
 multidispatch
 ==================
 
+[![Build Status](https://travis-ci.org/noomorph/multidispatch.png)](https://travis-ci.org/noomorph/multidispatch)
+
 Very basic multidispatch in **Ruby** using natural syntax.
 Currently supports overloads by count of mandatory parameters.
 So, it solves only one problem. Converts the following code:
