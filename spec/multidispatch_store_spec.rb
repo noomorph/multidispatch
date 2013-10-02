@@ -13,7 +13,7 @@ describe Multidispatch::Store do
       before { @the_method = subject.set(Hash, :inspect) }
 
       it { @the_method.should be_instance_of(UnboundMethod) }
-      its(:store) { should == {"Hash" => {inspect: {0 => @the_method}}} }
+      its(:store) { should == {"Hash" => {:inspect => {0 => @the_method}}} }
 
       it "get() returns it" do
         subject.get(Hash, :inspect, 0).should == @the_method
