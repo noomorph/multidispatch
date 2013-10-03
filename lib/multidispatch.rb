@@ -1,4 +1,5 @@
 require "multidispatch/store"
+require "multidispatch/interceptor"
 require "multidispatch/version"
 
 module Multidispatch
@@ -8,18 +9,11 @@ module Multidispatch
   end
 
   module ClassMethods
-    @@store = Store.new
+    @@interceptor = Interceptor.new(Store.new)
 
-    def method_added(name)
-      return if @@store.locked? # prevent recursion
-      @@store.set(self, name)
-
-      @@store.lock!
-      define_method(name) do |*args|
-        method = @@store.get(self.class, name, args.count)
-        method.bind(self).call(*args)
-      end
-      @@store.release!
+    def method_added(method_name)
+      @@interceptor.intercept(instance_method(method_name))
     end
   end
+
 end
