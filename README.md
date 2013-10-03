@@ -1,7 +1,9 @@
 multidispatch
 ==================
 
+[![Gem Version](https://badge.fury.io/rb/multidispatch.png)](http://badge.fury.io/rb/multidispatch)
 [![Build Status](https://travis-ci.org/noomorph/multidispatch.png)](https://travis-ci.org/noomorph/multidispatch)
+[![Coverage Status](https://coveralls.io/repos/noomorph/multidispatch/badge.png)](https://coveralls.io/r/noomorph/multidispatch)
 
 Very basic multidispatch in **Ruby** using natural syntax.
 Currently supports overloads by count of mandatory parameters.
