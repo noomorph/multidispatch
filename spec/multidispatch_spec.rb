@@ -9,8 +9,7 @@ describe Multidispatch do
     class IsExtended; end
     subject.included(IsExtended)
 
-    modules = IsExtended.singleton_class.included_modules
-    modules.should include(Multidispatch::ClassMethods)
+    IsExtended.is_a?(Multidispatch::ClassMethods).should be_true
   end
 end
 
@@ -28,7 +27,7 @@ describe Multidispatch::ClassMethods do
     class DoesNotInclude
     end
 
-    DoesNotInclude.method(:method_added).should_not == subject
+    DoesNotInclude.is_a?(Multidispatch::ClassMethods).should be_false
   end
 
   it "should extend class that includes it" do
@@ -36,6 +35,6 @@ describe Multidispatch::ClassMethods do
       extend Multidispatch::ClassMethods
     end
 
-    Includes.method(:method_added).owner.should == subject
+    Includes.is_a?(Multidispatch::ClassMethods).should be_true
   end
 end

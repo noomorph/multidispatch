@@ -9,11 +9,11 @@ class Multidispatch::Interceptor
     return if @store.locked? # prevent recursion
 
     store = @store
-    store.set(method.owner, method.name)
+    store.set(method.owner, method.name.to_s)
     store.lock!
 
     method_body = lambda do |*args|
-      method = store.get(self.class, method.name, args.count)
+      method = store.get(self.class, method.name.to_s, args.count)
       method.bind(self).call(*args)
     end
 

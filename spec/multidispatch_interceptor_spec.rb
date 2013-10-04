@@ -23,7 +23,7 @@ describe Multidispatch::Interceptor do
 
     it "should save method to store" do
       subject.intercept(@foo)
-      expect(subject.store).to have_received(:set).with(Foo, :foo)
+      expect(subject.store).to have_received(:set).with(Foo, "foo")
     end
 
     it "should lock store before re-defining method" do
